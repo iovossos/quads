@@ -1,16 +1,34 @@
-package piscine
+package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"strconv"
+)
 
-func QuadC(x, y int) {
-	// Check if x and y are positive, otherwise do nothing
-	if x <= 0 || y <= 0 {
+func main() {
+	// Check if enough arguments are provided
+	if len(os.Args) != 3 {
+		fmt.Println("Usage: ./quadC x y")
 		return
 	}
+
+	// Convert the arguments to integers
+	x, errX := strconv.Atoi(os.Args[1])
+	y, errY := strconv.Atoi(os.Args[2])
+
+	// Check if the arguments are valid integers
+	if errX != nil || errY != nil || x <= 0 || y <= 0 {
+		fmt.Println("Error: Invalid input. Both x and y must be positive integers.")
+		return
+	}
+
+	// Special case for x == 4 and y == 1
 	if x == 4 && y == 1 {
 		fmt.Println("money money money$$$$")
 		return
 	}
+
 	// Loop through the rows (y times)
 	for i := 0; i < y; i++ {
 		// Loop through the columns (x times)
