@@ -1,10 +1,25 @@
-package piscine
+package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"strconv"
+)
 
-func QuadA(x, y int) {
-	// Check if x and y are positive, otherwise do nothing
-	if x <= 0 || y <= 0 {
+func main() {
+	// Check if enough arguments are provided
+	if len(os.Args) != 3 {
+		fmt.Println("Usage: ./quadA x y")
+		return
+	}
+
+	// Convert the arguments to integers
+	x, errX := strconv.Atoi(os.Args[1])
+	y, errY := strconv.Atoi(os.Args[2])
+
+	// Check if the arguments are valid integers
+	if errX != nil || errY != nil || x <= 0 || y <= 0 {
+		fmt.Println("Error: Invalid input. Both x and y must be positive integers.")
 		return
 	}
 
