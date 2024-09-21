@@ -1,4 +1,4 @@
-package piscine
+package main
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func RunQuadE() {
+func main() {
 	// Check if enough arguments are provided
 	if len(os.Args) != 3 {
 		fmt.Println("Usage: ./quadE x y")
@@ -23,11 +23,6 @@ func RunQuadE() {
 		return
 	}
 
-	// Call QuadE with the valid x and y
-	QuadE(x, y)
-}
-
-func QuadE(x, y int) {
 	// Loop through the rows (y times)
 	for i := 0; i < y; i++ {
 		// Loop through the columns (x times)
