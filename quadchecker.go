@@ -13,31 +13,31 @@ func main() {
 	// Step 1: Read the input from stdin (the piped output from one of the quad executables)
 	input := new(bytes.Buffer)
 	scanner := bufio.NewScanner(os.Stdin)
-	firstLine := true
-	var dimensions []string
 
-	// Capture the piped output and dimensions from the first command
+	// Read the entire input
 	for scanner.Scan() {
-		line := scanner.Text()
-		if firstLine {
-			// Assume the first line contains the quad dimensions from the command, extract them
-			dimensions = strings.Fields(line)
-			if len(dimensions) != 2 {
-				fmt.Fprintln(os.Stderr, "Error: Unable to extract dimensions from the input.")
-				os.Exit(1)
-			}
-			firstLine = false
-		}
-		input.WriteString(line + "\n")
+		input.WriteString(scanner.Text() + "\n")
 	}
 	if err := scanner.Err(); err != nil {
 		fmt.Fprintf(os.Stderr, "Error reading input: %v\n", err)
 		os.Exit(1)
 	}
 
-	// Step 2: Extract the dimensions
-	dimX := dimensions[0]
-	dimY := dimensions[1]
+	// Step 2: Capture the dimensions from the environment variable (if set by the piped executable)
+	dimensions := os.Getenv("QUAD_DIMENSIONS")
+	if dimensions == "" {
+		fmt.Fprintln(os.Stderr, "Error: Unable to extract dimensions from the input.")
+		os.Exit(1)
+	}
+
+	// Split the dimensions (should be two numbers, e.g., "1 1")
+	dim := strings.Fields(dimensions)
+	if len(dim) != 2 {
+		fmt.Fprintln(os.Stderr, "Error: Invalid dimensions format.")
+		os.Exit(1)
+	}
+	dimX := dim[0]
+	dimY := dim[1]
 
 	// Step 3: Define the quad executables to compare against
 	quadExecutables := []string{"./quadA", "./quadB", "./quadC", "./quadD", "./quadE"}
