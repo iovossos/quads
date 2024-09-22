@@ -35,9 +35,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Step 3: Validate that the dimensions are positive integers
+	// Step 3: Validate that the dimensions are positive integers and non-zero
 	if columnCount <= 0 || rowCount <= 0 {
-		fmt.Fprintln(os.Stderr, "Error: Both x and y dimensions must be positive integers.")
+		fmt.Fprintln(os.Stderr, "Error: Both x and y dimensions must be positive integers and greater than 0.")
 		os.Exit(1)
 	}
 
