@@ -76,6 +76,6 @@ func main() {
 		fmt.Println(strings.Join(matches, " || "))
 	} else {
 		// No match found, but don't print multiple exit statuses
-		fmt.Println("Not a quad function")
+		fmt.Println("You need to provide proper arguments(Two positive integers that represent x and y)")
 	}
 }
