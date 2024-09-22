@@ -76,6 +76,6 @@ func main() {
 		fmt.Println(strings.Join(matches, " || "))
 	} else {
 		// No match found, but don't print multiple exit statuses
-		os.Exit(1)
+		fmt.Println("Not a quad function")
 	}
 }
