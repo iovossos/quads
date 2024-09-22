@@ -6,11 +6,21 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 func main() {
-	// Step 1: Read the input from stdin (the piped output from one of the quad executables)
-	fmt.Println("Reading piped input...")
+	// Step 1: Ensure correct number of arguments
+	if len(os.Args) < 3 {
+		fmt.Fprintln(os.Stderr, "Usage: ./quadchecker <width> <height>")
+		os.Exit(1)
+	}
+
+	// Get the dimensions from the command-line arguments
+	dimX := os.Args[1]
+	dimY := os.Args[2]
+
+	// Step 2: Read the input from stdin (the piped output from one of the quad executables)
 	input := new(bytes.Buffer)
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
@@ -21,15 +31,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Step 2: Define the quad executables to compare against
+	// Step 3: Define the quad executables to compare against
 	quadExecutables := []string{"./quadA", "./quadB", "./quadC", "./quadD", "./quadE"}
-	matchFound := false
+	matches := []string{} // To store the matches
 
-	// Step 3: Loop through each quad executable and compare outputs
+	// Step 4: Loop through each quad executable and compare outputs
 	for _, quad := range quadExecutables {
 		// Call the quad executable with the same dimensions that were piped in
-		fmt.Printf("Checking %s...\n", quad)
-		cmd := exec.Command(quad, "1", "1") // Assuming dimensions are 1x1, adjust as needed
+		cmd := exec.Command(quad, dimX, dimY) // Use the provided dimensions
 		var out bytes.Buffer
 		cmd.Stdout = &out
 		if err := cmd.Run(); err != nil {
@@ -39,13 +48,15 @@ func main() {
 
 		// Compare the output of the quad executable with the piped input
 		if out.String() == input.String() {
-			fmt.Printf("Match found with %s!\n", quad)
-			matchFound = true
+			// Add the match in the required format
+			matches = append(matches, fmt.Sprintf("[%s] [%s] [%s]", quad, dimX, dimY))
 		}
 	}
 
-	// Step 4: If no match is found
-	if !matchFound {
+	// Step 5: Output the matches in the desired format
+	if len(matches) > 0 {
+		fmt.Println(strings.Join(matches, " || "))
+	} else {
 		fmt.Println("No match found with any quad.")
 	}
 }
