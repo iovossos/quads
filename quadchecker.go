@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"runtime"
@@ -11,6 +12,9 @@ import (
 )
 
 func main() {
+	// Disable timestamps in log output
+	log.SetFlags(0)
+
 	// Step 1: Read the input from stdin (the piped output from one of the quad executables)
 	input := new(bytes.Buffer)
 	scanner := bufio.NewScanner(os.Stdin)
