@@ -29,6 +29,9 @@ func main() {
 		return
 	}
 
+	// Set the dimensions as an environment variable
+	os.Setenv("QUAD_DIMENSIONS", fmt.Sprintf("%d %d", x, y))
+
 	// Loop through the rows (y times)
 	for i := 0; i < y; i++ {
 		// Loop through the columns (x times)
