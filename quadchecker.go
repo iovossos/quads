@@ -38,7 +38,7 @@ func main() {
 	fmt.Printf("Calculated dimensions: %d x %d\n", columnCount, rowCount)
 
 	// Step 4: Define the quad executables to compare against
-	quadExecutables := []string{"./quadA", "./quadB", "./quadC", "./quadD", "./quadE"}
+	quadExecutables := []string{"quadA", "quadB", "quadC", "quadD", "quadE"}
 	matches := []string{} // To store the matches
 
 	// Step 5: Loop through each quad executable and compare outputs
