@@ -10,17 +10,7 @@ import (
 )
 
 func main() {
-	// Step 1: Ensure correct number of arguments
-	if len(os.Args) < 3 {
-		fmt.Fprintln(os.Stderr, "Usage: ./quadchecker <width> <height>")
-		os.Exit(1)
-	}
-
-	// Get the dimensions from the command-line arguments
-	dimX := os.Args[1]
-	dimY := os.Args[2]
-
-	// Step 2: Read the input from stdin (the piped output from one of the quad executables)
+	// Step 1: Read the input from stdin (the piped output from one of the quad executables)
 	input := new(bytes.Buffer)
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
@@ -31,14 +21,25 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Step 3: Define the quad executables to compare against
+	// Extract the dimensions dynamically from the input (piped input in this case)
+	// You can assume the dimensions are captured from the arguments of the quad executable
+	args := strings.Fields(os.Getenv("CMDLINE")) // Fetches the original command arguments passed to the quad executables
+	if len(args) < 2 {
+		fmt.Fprintln(os.Stderr, "Error: Unable to extract dimensions from the input.")
+		os.Exit(1)
+	}
+
+	dimX := args[1] // Extracted width
+	dimY := args[2] // Extracted height
+
+	// Step 2: Define the quad executables to compare against
 	quadExecutables := []string{"./quadA", "./quadB", "./quadC", "./quadD", "./quadE"}
 	matches := []string{} // To store the matches
 
-	// Step 4: Loop through each quad executable and compare outputs
+	// Step 3: Loop through each quad executable and compare outputs
 	for _, quad := range quadExecutables {
 		// Call the quad executable with the same dimensions that were piped in
-		cmd := exec.Command(quad, dimX, dimY) // Use the provided dimensions
+		cmd := exec.Command(quad, dimX, dimY) // Use the dimensions extracted dynamically
 		var out bytes.Buffer
 		cmd.Stdout = &out
 		if err := cmd.Run(); err != nil {
@@ -53,7 +54,7 @@ func main() {
 		}
 	}
 
-	// Step 5: Output the matches in the desired format
+	// Step 4: Output the matches in the desired format
 	if len(matches) > 0 {
 		fmt.Println(strings.Join(matches, " || "))
 	} else {
