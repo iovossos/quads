@@ -35,13 +35,19 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Step 3: Print the calculated dimensions
+	// Step 3: Validate that the dimensions are positive integers
+	if columnCount <= 0 || rowCount <= 0 {
+		fmt.Fprintln(os.Stderr, "Error: Both x and y dimensions must be positive integers.")
+		os.Exit(1)
+	}
+
+	// Step 4: Print the calculated dimensions
 	fmt.Printf("Calculated dimensions: %d x %d\n", columnCount, rowCount)
 
-	// Step 4: Define the quad executables to compare against
+	// Step 5: Define the quad executables to compare against
 	quadExecutables := []string{"quadA", "quadB", "quadC", "quadD", "quadE"}
 
-	// Step 5: Adjust for Windows (add .exe extension)
+	// Step 6: Adjust for Windows (add .exe extension)
 	if runtime.GOOS == "windows" {
 		for i := range quadExecutables {
 			quadExecutables[i] += ".exe"
@@ -50,10 +56,10 @@ func main() {
 
 	matches := []string{} // To store the matches
 
-	// Step 6: Loop through each quad executable and compare outputs
+	// Step 7: Loop through each quad executable and compare outputs
 	for _, quad := range quadExecutables {
 		// Call the quad executable with the calculated dimensions
-		cmd := exec.Command("./" + quad, fmt.Sprintf("%d", columnCount), fmt.Sprintf("%d", rowCount))
+		cmd := exec.Command("./"+quad, fmt.Sprintf("%d", columnCount), fmt.Sprintf("%d", rowCount))
 		var out bytes.Buffer
 		cmd.Stdout = &out
 		if err := cmd.Run(); err != nil {
@@ -68,7 +74,7 @@ func main() {
 		}
 	}
 
-	// Step 7: Output the matches in the desired format
+	// Step 8: Output the matches in the desired format
 	if len(matches) > 0 {
 		fmt.Println(strings.Join(matches, " || "))
 	} else {
