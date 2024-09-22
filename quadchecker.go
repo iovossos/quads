@@ -21,13 +21,17 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Step 2: Extract dimensions from arguments
+	// Step 2: Extract the command-line used to invoke quadC, which will contain the dimensions
 	if len(os.Args) < 2 {
-		fmt.Fprintln(os.Stderr, "Error: No dimensions provided.")
+		fmt.Fprintln(os.Stderr, "Error: Unable to extract dimensions.")
 		os.Exit(1)
 	}
-	dimX := os.Args[1]
-	dimY := os.Args[2]
+
+	// Extract the last executed command from os.Args
+	// Assuming the dimensions were passed like this: ./quadC <dimX> <dimY>
+	command := os.Args[0]       // The command is ./quadC
+	dimX := os.Args[len(os.Args)-2] // Extract width
+	dimY := os.Args[len(os.Args)-1] // Extract height
 
 	// Step 3: Define the quad executables to compare against
 	quadExecutables := []string{"./quadA", "./quadB", "./quadC", "./quadD", "./quadE"}
