@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"strings" // Add this import
+	"runtime"
+	"strings"
 )
 
 func main() {
@@ -39,12 +40,20 @@ func main() {
 
 	// Step 4: Define the quad executables to compare against
 	quadExecutables := []string{"quadA", "quadB", "quadC", "quadD", "quadE"}
+
+	// Step 5: Adjust for Windows (add .exe extension)
+	if runtime.GOOS == "windows" {
+		for i := range quadExecutables {
+			quadExecutables[i] += ".exe"
+		}
+	}
+
 	matches := []string{} // To store the matches
 
-	// Step 5: Loop through each quad executable and compare outputs
+	// Step 6: Loop through each quad executable and compare outputs
 	for _, quad := range quadExecutables {
 		// Call the quad executable with the calculated dimensions
-		cmd := exec.Command(quad, fmt.Sprintf("%d", columnCount), fmt.Sprintf("%d", rowCount))
+		cmd := exec.Command("./" + quad, fmt.Sprintf("%d", columnCount), fmt.Sprintf("%d", rowCount))
 		var out bytes.Buffer
 		cmd.Stdout = &out
 		if err := cmd.Run(); err != nil {
@@ -59,7 +68,7 @@ func main() {
 		}
 	}
 
-	// Step 6: Output the matches in the desired format
+	// Step 7: Output the matches in the desired format
 	if len(matches) > 0 {
 		fmt.Println(strings.Join(matches, " || "))
 	} else {
