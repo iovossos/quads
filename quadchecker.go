@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"runtime"
@@ -12,9 +11,6 @@ import (
 )
 
 func main() {
-	// Disable timestamps in log output
-	log.SetFlags(0)
-
 	// Step 1: Read the input from stdin (the piped output from one of the quad executables)
 	input := new(bytes.Buffer)
 	scanner := bufio.NewScanner(os.Stdin)
@@ -35,13 +31,13 @@ func main() {
 	}
 
 	if err := scanner.Err(); err != nil {
-		fmt.Fprintf(os.Stderr, "Error reading input: %v\n", err)
+		// Return the error without printing anything to stderr
 		os.Exit(1)
 	}
 
 	// Step 3: Check if the output contains an error message starting with "Usage:" or invalid input
 	if columnCount == 0 || rowCount == 0 || input.Len() == 0 || strings.HasPrefix(input.String(), "Usage:") {
-		fmt.Fprintln(os.Stderr, "Error: Invalid input or arguments. Ensure that the quad function is used with proper dimensions.")
+		// Return the error silently
 		os.Exit(1)
 	}
 
@@ -67,8 +63,7 @@ func main() {
 		var out bytes.Buffer
 		cmd.Stdout = &out
 		if err := cmd.Run(); err != nil {
-			fmt.Fprintf(os.Stderr, "Failed to run %s: %v\n", quad, err)
-			continue
+			continue // Silent failure, main program will handle the error
 		}
 
 		// Compare the output of the quad executable with the piped input
@@ -82,6 +77,7 @@ func main() {
 	if len(matches) > 0 {
 		fmt.Println(strings.Join(matches, " || "))
 	} else {
-		fmt.Println("No match found with any quad.")
+		// No match found, but don't print multiple exit statuses
+		os.Exit(1)
 	}
 }
