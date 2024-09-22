@@ -41,8 +41,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Step 4: Print the calculated dimensions
-	fmt.Printf("Calculated dimensions: %d x %d\n", columnCount, rowCount)
 
 	// Step 5: Define the quad executables to compare against
 	quadExecutables := []string{"quadA", "quadB", "quadC", "quadD", "quadE"}
