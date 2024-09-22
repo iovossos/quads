@@ -21,17 +21,19 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Step 2: Extract the command-line used to invoke quadC, which will contain the dimensions
-	if len(os.Args) < 2 {
+	// Step 2: Extract the dimensions from the piped command's environment
+	// Since we're piping the output, we don't have direct access to the command-line arguments passed to quadC.
+	// We'll extract the dimensions from os.Environ() which stores the parent command.
+
+	// Assuming the command like `./quadC 1 1` was run
+	cmd := os.Getenv("_")
+	args := strings.Fields(cmd)
+	if len(args) < 3 {
 		fmt.Fprintln(os.Stderr, "Error: Unable to extract dimensions.")
 		os.Exit(1)
 	}
-
-	// Extract the last executed command from os.Args
-	// Assuming the dimensions were passed like this: ./quadC <dimX> <dimY>
-	command := os.Args[0]       // The command is ./quadC
-	dimX := os.Args[len(os.Args)-2] // Extract width
-	dimY := os.Args[len(os.Args)-1] // Extract height
+	dimX := args[1]
+	dimY := args[2]
 
 	// Step 3: Define the quad executables to compare against
 	quadExecutables := []string{"./quadA", "./quadB", "./quadC", "./quadD", "./quadE"}
@@ -40,7 +42,7 @@ func main() {
 	// Step 4: Loop through each quad executable and compare outputs
 	for _, quad := range quadExecutables {
 		// Call the quad executable with the same dimensions that were piped in
-		cmd := exec.Command(quad, dimX, dimY) // Use dimensions from input
+		cmd := exec.Command(quad, dimX, dimY) // Use dimensions from environment
 		var out bytes.Buffer
 		cmd.Stdout = &out
 		if err := cmd.Run(); err != nil {
