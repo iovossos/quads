@@ -35,9 +35,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Step 3: Validate that the dimensions are positive integers and non-zero
-	if columnCount <= 0 || rowCount <= 0 {
-		fmt.Fprintln(os.Stderr, "Error: Both x and y dimensions must be positive integers and greater than 0.")
+	// Step 3: Check if the output contains an error message or is an empty rectangle
+	if columnCount == 0 || rowCount == 0 || input.Len() == 0 || strings.Contains(input.String(), "Error") {
+		fmt.Fprintln(os.Stderr, "Error: Invalid output from the quad function. Ensure a valid rectangle is generated.")
 		os.Exit(1)
 	}
 
