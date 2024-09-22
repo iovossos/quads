@@ -35,9 +35,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Step 3: Check if the output contains an error message or is an empty rectangle
-	if columnCount == 0 || rowCount == 0 || input.Len() == 0 || strings.Contains(input.String(), "Error") {
-		fmt.Fprintln(os.Stderr, "Error: Invalid output from the quad function. Ensure a valid rectangle is generated.")
+	// Step 3: Check if the output contains an error message starting with "Usage:" or invalid input
+	if columnCount == 0 || rowCount == 0 || input.Len() == 0 || strings.HasPrefix(input.String(), "Usage:") {
+		fmt.Fprintln(os.Stderr, "Error: Invalid input or arguments. Ensure that the quad function is used with proper dimensions.")
 		os.Exit(1)
 	}
 
